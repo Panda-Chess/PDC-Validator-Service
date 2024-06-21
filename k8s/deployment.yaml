@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: validator-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: validator-service
+  template:
+    metadata:
+      labels:
+        app: validator-service
+    spec:
+      imagePullSecrets:
+        - name: githubtoken
+      containers:
+        - name: validator-service
+          image: ghcr.io/panda-chess/pdc-validator-service:main
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+          resources:
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
